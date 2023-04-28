@@ -8,13 +8,12 @@ const form = document.querySelector(`.search-form`);
 const loadMoreBtn = document.querySelector(`.load-more`);
 
 form.addEventListener(`submit`, onSearchForm);
+// gallery.addEventListener(`click`, onPictureClick);
 loadMoreBtn.addEventListener(`click`, loadMoreItems);
 
 let page = 1;
 let name = ``;
 loadMoreBtn.style.display = `none`;
-let simplelightbox = null;
-
 
 function onSearchForm(event) {
   cleanPage();
@@ -30,7 +29,7 @@ function onSearchForm(event) {
 
 async function fetchUrl(searchRequest, page = 1) {
   try {
-    const KEY = `35750180-cd749992051e3f8ac143842f2`;
+    const KEY = `29526037-011b39b59387f2f37ea2d4748`;
     const URL = `https://pixabay.com/api/`;
 
     const arrOfItems = await Axios.get(`${URL}`, {
@@ -48,7 +47,14 @@ async function fetchUrl(searchRequest, page = 1) {
     console.log(arrOfItems);
 
     if (arrOfItems.data.totalHits > 0 && page === 1) {
-      
+        let bigPictures = new SimpleLightbox(`.gallery a`, {
+            captionType: 'attr',
+            captionsData: `alt`,
+            captionDelay: 250,
+          });
+        
+          bigPictures.on('show.simplelightbox', function () {});
+          bigPictures.refresh();
       Notiflix.Notify.info(
         `Hooray! We found ${arrOfItems.data.totalHits} images.`
       );
@@ -99,9 +105,11 @@ console.log(arr.hits);
   }
 }
 
+
 function loadMoreItems() {
   fetchUrl(name, (page += 1));
 }
+
 
 function cleanPage() {
   loadMoreBtn.style.display = `none`;
@@ -109,10 +117,20 @@ function cleanPage() {
   page = 1;
 }
 
-const lightbox = new SimpleLightbox('.gallery a', { 
-    captionType:'attr',
-    captionsData:`alt`,
-    captionPosition:'bottom',
-    captionDelay:250,
- });
- 
+
+// function onPictureClick(event) {
+//   event.preventDefault();
+
+//   if (event.target.nodeName !== 'IMG') {
+//     return;
+//   }
+
+//   let bigPictures = new SimpleLightbox(`.gallery a`, {
+//     captionType: 'attr',
+//     captionsData: `alt`,
+//     captionDelay: 250,
+//   });
+
+//   bigPictures.on('show.simplelightbox', function () {});
+//   bigPictures.refresh();
+// }
