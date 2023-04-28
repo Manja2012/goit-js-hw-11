@@ -48,7 +48,7 @@ async function fetchUrl(searchRequest, page = 1) {
     console.log(arrOfItems);
 
     if (arrOfItems.data.totalHits > 0 && page === 1) {
-      simplelightbox = new SimpleLightbox('.gallery a').refresh();
+      
       Notiflix.Notify.info(
         `Hooray! We found ${arrOfItems.data.totalHits} images.`
       );
@@ -108,3 +108,11 @@ function cleanPage() {
   gallery.innerHTML = ``;
   page = 1;
 }
+
+const lightbox = new SimpleLightbox('.gallery a', { 
+    captionType:'attr',
+    captionsData:`alt`,
+    captionPosition:'bottom',
+    captionDelay:250,
+ });
+ 
