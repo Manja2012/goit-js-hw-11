@@ -8,12 +8,12 @@ const form = document.querySelector(`.search-form`);
 const loadMoreBtn = document.querySelector(`.load-more`);
 
 form.addEventListener(`submit`, onSearchForm);
-gallery.addEventListener(`click`, onPictureClick);
 loadMoreBtn.addEventListener(`click`, loadMoreItems);
 
 let page = 1;
 let name = ``;
 loadMoreBtn.style.display = `none`;
+let simplelightbox = null;
 
 
 function onSearchForm(event) {
@@ -48,6 +48,7 @@ async function fetchUrl(searchRequest, page = 1) {
     console.log(arrOfItems);
 
     if (arrOfItems.data.totalHits > 0 && page === 1) {
+      simplelightbox = new SimpleLightbox('.gallery a').refresh();
       Notiflix.Notify.info(
         `Hooray! We found ${arrOfItems.data.totalHits} images.`
       );
@@ -106,21 +107,4 @@ function cleanPage() {
   loadMoreBtn.style.display = `none`;
   gallery.innerHTML = ``;
   page = 1;
-}
-
-function onPictureClick(event) {
-  event.preventDefault();
-
-  if (event.target.nodeName !== 'IMG') {
-    return;
-  }
-
-  let bigPictures = new SimpleLightbox(`.gallery a`, {
-    captionType: 'attr',
-    captionsData: `alt`,
-    captionDelay: 250,
-  });
-
-  bigPictures.on('show.simplelightbox', function () {});
-  bigPictures.refresh();
 }
