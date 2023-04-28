@@ -8,12 +8,12 @@ const form = document.querySelector(`.search-form`);
 const loadMoreBtn = document.querySelector(`.load-more`);
 
 form.addEventListener(`submit`, onSearchForm);
-// gallery.addEventListener(`click`, onPictureClick);
 loadMoreBtn.addEventListener(`click`, loadMoreItems);
 
 let page = 1;
 let name = ``;
 loadMoreBtn.style.display = `none`;
+
 
 function onSearchForm(event) {
   cleanPage();
@@ -47,14 +47,6 @@ async function fetchUrl(searchRequest, page = 1) {
     console.log(arrOfItems);
 
     if (arrOfItems.data.totalHits > 0 && page === 1) {
-        let bigPictures = new SimpleLightbox(`.gallery a`, {
-            captionType: 'attr',
-            captionsData: `alt`,
-            captionDelay: 250,
-          });
-        
-          bigPictures.on('show.simplelightbox', function () {});
-          bigPictures.refresh();
       Notiflix.Notify.info(
         `Hooray! We found ${arrOfItems.data.totalHits} images.`
       );
@@ -105,11 +97,9 @@ console.log(arr.hits);
   }
 }
 
-
 function loadMoreItems() {
   fetchUrl(name, (page += 1));
 }
-
 
 function cleanPage() {
   loadMoreBtn.style.display = `none`;
@@ -117,20 +107,5 @@ function cleanPage() {
   page = 1;
 }
 
+const simplelightbox = new SimpleLightbox('.gallery a').refresh();
 
-// function onPictureClick(event) {
-//   event.preventDefault();
-
-//   if (event.target.nodeName !== 'IMG') {
-//     return;
-//   }
-
-//   let bigPictures = new SimpleLightbox(`.gallery a`, {
-//     captionType: 'attr',
-//     captionsData: `alt`,
-//     captionDelay: 250,
-//   });
-
-//   bigPictures.on('show.simplelightbox', function () {});
-//   bigPictures.refresh();
-// }
