@@ -27,6 +27,7 @@ function onSearchForm(event) {
   }
 }
 
+
 async function fetchUrl(searchRequest, page = 1) {
   try {
     const KEY = `29526037-011b39b59387f2f37ea2d4748`;
@@ -47,7 +48,7 @@ async function fetchUrl(searchRequest, page = 1) {
     console.log(arrOfItems);
 
     if (arrOfItems.data.totalHits > 0 && page === 1) {
-        const simplelightbox = new SimpleLightbox('.gallery a').refresh(); 
+
       Notiflix.Notify.info(
         `Hooray! We found ${arrOfItems.data.totalHits} images.`
       );
@@ -61,35 +62,42 @@ async function fetchUrl(searchRequest, page = 1) {
 
     renderMarkUp(arrOfItems.data);
 
+    new SimpleLightbox(`.gallery .photo-card`, {
+      captionType: 'attr',
+      captionsData: `alt`,
+      captionDelay: 250,
+    }).refresh();
+
   } catch (error) {
     Notiflix.Notify.warning(error);
   }
 }
 
-
 function renderMarkUp(arr) {
   const markUp = arr.hits.reduce((acc, hit) => {
     return (acc += `
     <div class="gallery__item" >
-    <a class="photo-card" href="${hit.largeImageURL}">
-   
-  <img class="gallery__img" src="${hit.webformatURL}" alt="${hit.tags}" loading="lazy" />
-  <a class="info">
-    <p class="info-item"> Likes:${hit.likes}</p>
-    <p class="info-item">Views:${hit.views}</p>
-    <p class="info-item">Comments:${hit.comments}</p>
-    <p class="info-item">Downloads:${hit.downloads}</p>
-  </a>
-  </div>
+      <a class="photo-card" href="${hit.largeImageURL}">
+        <img class="gallery__img" src="${hit.webformatURL}" alt="${hit.tags}" loading="lazy" />
+      </a>
+      <a class="info">
+        <p class="info-item"> Likes:${hit.likes}</p>
+        <p class="info-item">Views:${hit.views}</p>
+        <p class="info-item">Comments:${hit.comments}</p>
+        <p class="info-item">Downloads:${hit.downloads}</p>
+      </a>
+    </div>
     `);
   }, ``);
 
-  gallery.insertAdjacentHTML(`beforeend`, markUp);
+  gallery.innerHTML = '';
+
+  gallery.innerHTML = markUp;
 
   if (arr.hits.length > 0) {
-    loadMoreBtn.style.display = `block`;
+    loadMoreBtn.style.display = ``;
   }
-console.log(arr.hits);
+  console.log(arr.hits);
   if ((Math.floor(arr.totalHits / 40) < page) && arr.hits.length !=0) {
     loadMoreBtn.style.display = 'none';
     Notiflix.Notify.info(
@@ -102,11 +110,11 @@ function loadMoreItems() {
   fetchUrl(name, (page += 1));
 }
 
+
 function cleanPage() {
   loadMoreBtn.style.display = `none`;
   gallery.innerHTML = ``;
   page = 1;
 }
-
 
 
