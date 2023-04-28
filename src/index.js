@@ -47,6 +47,7 @@ async function fetchUrl(searchRequest, page = 1) {
     console.log(arrOfItems);
 
     if (arrOfItems.data.totalHits > 0 && page === 1) {
+        const simplelightbox = new SimpleLightbox('.gallery a').refresh(); 
       Notiflix.Notify.info(
         `Hooray! We found ${arrOfItems.data.totalHits} images.`
       );
@@ -107,5 +108,5 @@ function cleanPage() {
   page = 1;
 }
 
-const simplelightbox = new SimpleLightbox('.gallery a').refresh();
+
 
